@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bundur Birtane — Yapım Aşamasındayız</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:ital,opsz,wght@0,12..96,400;0,12..96,500;0,12..96,600;1,12..96,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --ink-1: #1b212f;
+    --ink-2: #232a3c;
+    --ink-3: #2b3346;
+    --brass: #c6a15b;
+    --brass-light: #e6cd94;
+    --brass-dim: rgba(198,161,91,0.28);
+    --parchment: #eee8db;
+    --parchment-dim: rgba(238,232,219,0.62);
+    --line: rgba(198,161,91,0.22);
+    --shadow: rgba(0,0,0,0.45);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html, body{
+    height:100%;
+  }
+
+  body{
+    font-family:'Manrope', sans-serif;
+    background: radial-gradient(ellipse at 50% 20%, var(--ink-3) 0%, var(--ink-2) 45%, var(--ink-1) 100%);
+    color: var(--parchment);
+    min-height:100vh;
+    width:100%;
+    overflow-x:hidden;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .light-bars{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .light-bars .bar{
+    position:absolute;
+    top:-30%;
+    left:100%;
+    width:1.5px;
+    height:170%;
+    background: rgba(198,161,91,0.16);
+    box-shadow: 0 0 10px 1px rgba(198,161,91,0.10);
+    filter: blur(0.3px);
+    transform: rotate(13deg);
+    animation: driftRTL 42s linear infinite;
+  }
+  .bar:nth-child(1){ animation-delay: 0s;   opacity:0.3; }
+  .bar:nth-child(2){ animation-delay: -9s;  opacity:0.18; }
+  .bar:nth-child(3){ animation-delay: -18s; opacity:0.32; }
+  .bar:nth-child(4){ animation-delay: -27s; opacity:0.16; }
+  .bar:nth-child(5){ animation-delay: -34s; opacity:0.24; }
+
+  @keyframes driftRTL{
+    from{ transform: rotate(13deg) translateX(0); }
+    to{ transform: rotate(13deg) translateX(-160vw); }
+  }
+
+  .vignette{
+    position:fixed;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(6,10,18,0.55) 100%);
+  }
+
+  .stage{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:720px;
+    padding: 48px 32px 40px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+
+  .logo-wrap{
+    margin-bottom: 22px;
+    opacity:0;
+    animation: riseIn 0.9s 0.15s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .logo-wrap img{
+    max-height: 168px;
+    max-width: min(78vw, 420px);
+    height:auto;
+    width:auto;
+    display:block;
+    clip-path: inset(0 100% 0 0);
+    animation:
+      logoDraw 1.7s 0.5s cubic-bezier(.4,.1,.2,1) forwards,
+      logoGlow 5s 2.5s ease-in-out infinite;
+  }
+  @keyframes logoDraw{
+    to{ clip-path: inset(0 0 0 0); }
+  }
+  @keyframes logoGlow{
+    0%, 100%{ filter: drop-shadow(0 4px 18px rgba(0,0,0,0.4)) drop-shadow(0 0 0px rgba(198,161,91,0)); }
+    50%{ filter: drop-shadow(0 4px 18px rgba(0,0,0,0.4)) drop-shadow(0 0 6px rgba(198,161,91,0.55)); }
+  }
+  .logo-fallback{
+    display:none;
+  }
+  .logo-fallback .firm-name{
+    font-family:'Bricolage Grotesque', sans-serif;
+    font-weight:500;
+    font-size: clamp(26px, 5vw, 34px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    display:block;
+  }
+  .logo-fallback .firm-tagline{
+    display:block;
+    margin-top: 6px;
+    font-family:'Manrope', sans-serif;
+    font-size: 11px;
+    font-weight:600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--brass);
+  }
+
+  .eyebrow{
+    font-family:'Manrope', sans-serif;
+    font-size: 12.5px;
+    font-weight:700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin-bottom: 18px;
+    opacity:0;
+    animation: riseIn 0.8s 0.55s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+
+  h1{
+    font-family:'Bricolage Grotesque', sans-serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(34px, 6vw, 58px);
+    line-height: 1.12;
+    letter-spacing: 0.005em;
+    color: var(--parchment);
+    max-width: 14ch;
+    opacity:0;
+    animation: riseIn 0.9s 0.7s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  h1 em{
+    font-style:normal;
+    color: var(--brass-light);
+  }
+
+  .subtitle{
+    margin-top: 18px;
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--parchment-dim);
+    max-width: 46ch;
+    font-weight: 400;
+    opacity:0;
+    animation: riseIn 0.9s 0.9s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+
+  .divider{
+    width: 64px;
+    height: 1px;
+    margin: 0 0 30px;
+    background: var(--brass-dim);
+    position:relative;
+    overflow:hidden;
+    opacity:0;
+    animation: riseIn 0.8s 0.68s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .divider::after{
+    content:"";
+    position:absolute;
+    top:0; left:-100%;
+    width:60%;
+    height:100%;
+    background: var(--brass);
+    animation: sweep 3.2s 1.5s ease-in-out infinite;
+  }
+  @keyframes sweep{
+    0%{ left:-60%; }
+    50%{ left:110%; }
+    100%{ left:110%; }
+  }
+
+  .contact{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap: 14px 34px;
+    margin-top: 34px;
+    margin-bottom: 30px;
+    opacity:0;
+    animation: riseIn 0.9s 1.2s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .contact a{
+    color: var(--parchment);
+    text-decoration:none;
+    font-size: 14.5px;
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    letter-spacing:0.01em;
+    transition: color 0.25s ease, transform 0.25s ease;
+    position:relative;
+  }
+  .contact a:hover, .contact a:focus-visible{
+    color: var(--brass-light);
+  }
+  .contact a svg{
+    width:16px; height:16px;
+    stroke: var(--brass);
+    flex-shrink:0;
+    transition: stroke 0.25s ease;
+  }
+  .contact a:hover svg, .contact a:focus-visible svg{ stroke: var(--brass-light); }
+
+  footer{
+    font-size: 12px;
+    color: rgba(238,232,219,0.4);
+    letter-spacing: 0.03em;
+    margin-top: 6px;
+    opacity:0;
+    animation: riseIn 0.9s 1.35s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+
+  @keyframes riseIn{
+    from{ opacity:0; transform: translateY(14px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  a:focus-visible{ outline: 1px solid var(--brass-light); outline-offset:3px; }
+
+  @media (max-width: 560px){
+    .stage{ padding: 36px 20px 28px; }
+    .logo-wrap img{ max-height:120px; }
+    h1{ max-width: 16ch; }
+    .contact{ flex-direction:column; gap:16px; align-items:center; }
+  }
+
+  @media (max-width: 360px){
+    h1{ font-size: 30px; }
+    .subtitle{ font-size:14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .light-bars .bar{ animation:none; opacity:0.35; }
+    .divider::after{ display:none; }
+  }
+
+</style>
+</head>
+<body>
+
+  <div class="light-bars" aria-hidden="true">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <main class="stage">
+
+    <div class="logo-wrap">
+      <img src="BB-logo.png" alt="Bundur Birtane Logosu" id="logoImg"
+           onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='block';">
+      <div class="logo-fallback" id="logoFallback">
+        <span class="firm-name">Bundur Birtane</span>
+        <span class="firm-tagline">Attorneys at Law</span>
+      </div>
+    </div>
+
+    <p class="eyebrow">Yapım Aşamasında</p>
+
+    <div class="divider"></div>
+
+    <h1>Yeni web sitemiz <em>çok yakında</em> hizmetinizde.</h1>
+
+    <p class="subtitle">
+      Size daha iyi hizmet verebilmek için dijital ofisimizi yeniliyoruz.
+      Bu süreçte hukuki danışmanlık ve destek almak için bize doğrudan ulaşabilirsiniz.
+    </p>
+
+    <div class="contact">
+      <a href="tel:+905074369287">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg>
+        <span>+90 507 436 92 87</span>
+      </a>
+      <a href="mailto:info@birtane.av.tr">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M3 6h18v12H3z"/><path d="M3 6l9 7 9-7"/></svg>
+        <span>info@birtane.av.tr</span>
+      </a>
+    </div>
+
+    <footer>&copy; <span id="year"></span> Bundur Birtane — Tüm hakları saklıdır.</footer>
+
+  </main>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
