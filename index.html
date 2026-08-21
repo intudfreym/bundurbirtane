@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,6 +41,10 @@
     justify-content:center;
   }
 
+  /* language visibility */
+  html[data-lang="tr"] [data-en]{ display:none !important; }
+  html[data-lang="en"] [data-tr]{ display:none !important; }
+
   .light-bars{
     position:fixed;
     inset:0;
@@ -77,6 +81,47 @@
     z-index:1;
     pointer-events:none;
     background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(6,10,18,0.55) 100%);
+  }
+
+  /* language switcher */
+  .lang-switch{
+    position:fixed;
+    top:20px;
+    right:24px;
+    z-index:5;
+    display:flex;
+    gap:8px;
+    opacity:0;
+    animation: riseIn 0.8s 0.1s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .lang-btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    color: var(--parchment-dim);
+    font-family:'Manrope', sans-serif;
+    font-size: 12px;
+    font-weight:600;
+    letter-spacing: 0.04em;
+    padding: 6px 11px;
+    border-radius: 999px;
+    cursor:pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .lang-btn .flag{
+    font-size:14px;
+    line-height:1;
+  }
+  .lang-btn:hover{
+    color: var(--parchment);
+    border-color: var(--brass-dim);
+  }
+  .lang-btn.active{
+    color: var(--brass-light);
+    border-color: var(--brass);
+    background: rgba(198,161,91,0.10);
   }
 
   .stage{
@@ -212,7 +257,7 @@
     opacity:0;
     animation: riseIn 0.9s 1.2s cubic-bezier(.2,.8,.2,1) forwards;
   }
-  .contact a{
+  .contact-item{
     color: var(--parchment);
     text-decoration:none;
     font-size: 14.5px;
@@ -221,19 +266,20 @@
     align-items:center;
     gap:9px;
     letter-spacing:0.01em;
+    white-space:nowrap;
     transition: color 0.25s ease, transform 0.25s ease;
     position:relative;
   }
-  .contact a:hover, .contact a:focus-visible{
+  a.contact-item:hover, a.contact-item:focus-visible{
     color: var(--brass-light);
   }
-  .contact a svg{
+  .contact-item svg{
     width:16px; height:16px;
     stroke: var(--brass);
     flex-shrink:0;
     transition: stroke 0.25s ease;
   }
-  .contact a:hover svg, .contact a:focus-visible svg{ stroke: var(--brass-light); }
+  a.contact-item:hover svg, a.contact-item:focus-visible svg{ stroke: var(--brass-light); }
 
   footer{
     font-size: 12px;
@@ -249,18 +295,28 @@
     to{ opacity:1; transform: translateY(0); }
   }
 
-  a:focus-visible{ outline: 1px solid var(--brass-light); outline-offset:3px; }
+  a:focus-visible, .lang-btn:focus-visible{ outline: 1px solid var(--brass-light); outline-offset:3px; }
 
   @media (max-width: 560px){
     .stage{ padding: 36px 20px 28px; }
     .logo-wrap img{ max-height:120px; }
     h1{ max-width: 16ch; }
-    .contact{ flex-direction:column; gap:16px; align-items:center; }
+    .lang-switch{ top:14px; right:14px; }
+    .lang-btn{ padding:5px 9px; font-size:11px; }
+    .contact{
+      flex-direction:column;
+      flex-wrap:nowrap;
+      gap:16px;
+      align-items:center;
+      width:100%;
+    }
+    .contact-item{ justify-content:center; }
   }
 
   @media (max-width: 360px){
     h1{ font-size: 30px; }
     .subtitle{ font-size:14px; }
+    .contact-item{ font-size:13.5px; }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -286,6 +342,15 @@
   </div>
   <div class="vignette" aria-hidden="true"></div>
 
+  <nav class="lang-switch" aria-label="Dil seçimi / Language selection">
+    <button type="button" class="lang-btn" data-lang-btn="tr" aria-label="Türkçe">
+      <span class="flag" aria-hidden="true">🇹🇷</span><span>TR</span>
+    </button>
+    <button type="button" class="lang-btn" data-lang-btn="en" aria-label="English">
+      <span class="flag" aria-hidden="true">🇬🇧</span><span>EN</span>
+    </button>
+  </nav>
+
   <main class="stage">
 
     <div class="logo-wrap">
@@ -297,34 +362,91 @@
       </div>
     </div>
 
-    <p class="eyebrow">Yapım Aşamasında</p>
+    <p class="eyebrow" data-tr>Yapım Aşamasında</p>
+    <p class="eyebrow" data-en>Under Construction</p>
 
     <div class="divider"></div>
 
-    <h1>Yeni web sitemiz <em>çok yakında</em> hizmetinizde.</h1>
+    <h1 data-tr>Yeni web sitemiz <em>çok yakında</em> hizmetinizde.</h1>
+    <h1 data-en>Our new website is coming <em>very soon</em>.</h1>
 
-    <p class="subtitle">
+    <p class="subtitle" data-tr>
       Size daha iyi hizmet verebilmek için dijital ofisimizi yeniliyoruz.
       Bu süreçte hukuki danışmanlık ve destek almak için bize doğrudan ulaşabilirsiniz.
     </p>
+    <p class="subtitle" data-en>
+      We are renewing our digital office to serve you better.
+      In the meantime, you can reach us directly for legal advice and support.
+    </p>
 
     <div class="contact">
-      <a href="tel:+905074369287">
+      <a class="contact-item" href="tel:+905074369287">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg>
         <span>+90 507 436 92 87</span>
       </a>
-      <a href="mailto:info@birtane.av.tr">
+      <a class="contact-item" href="mailto:info@birtane.av.tr">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M3 6h18v12H3z"/><path d="M3 6l9 7 9-7"/></svg>
         <span>info@birtane.av.tr</span>
       </a>
+      <span class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 21s7-7.58 7-12A7 7 0 1 0 5 9c0 4.42 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        <span>İstanbul — Lüksemburg</span>
+        <span data-tr>&copy; İstanbul — Lüksemburg</span>
+        <span data-tr>&copy; Istanbul — Luxembourg</span>
+      </span>
     </div>
 
-    <footer>&copy; <span id="year"></span> Bundur Birtane — Tüm hakları saklıdır.</footer>
+    <footer>
+      <span data-tr>&copy; <span class="year"></span> Bundur Birtane — Tüm hakları saklıdır.</span>
+      <span data-en>&copy; <span class="year"></span> Bundur Birtane — All rights reserved.</span>
+    </footer>
 
   </main>
 
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    document.querySelectorAll('.year').forEach(function(el){
+      el.textContent = new Date().getFullYear();
+    });
+
+    (function(){
+      var STORAGE_KEY = 'bb_lang';
+
+      function applyLang(lang){
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('data-lang', lang);
+        document.querySelectorAll('.lang-btn').forEach(function(btn){
+          btn.classList.toggle('active', btn.getAttribute('data-lang-btn') === lang);
+        });
+      }
+
+      var stored = null;
+      try { stored = localStorage.getItem(STORAGE_KEY); } catch(e) {}
+
+      if(stored === 'tr' || stored === 'en'){
+        applyLang(stored);
+      } else {
+        applyLang('tr');
+        fetch('https://ipwho.is/')
+          .then(function(r){ return r.json(); })
+          .then(function(data){
+            var already = null;
+            try { already = localStorage.getItem(STORAGE_KEY); } catch(e) {}
+            if(already) return; 
+            var countryCode = data && data.country_code;
+            applyLang(countryCode === 'TR' ? 'tr' : 'en');
+          })
+          .catch(function(){
+          });
+      }
+
+      document.querySelectorAll('.lang-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var lang = btn.getAttribute('data-lang-btn');
+          try { localStorage.setItem(STORAGE_KEY, lang); } catch(e) {}
+          applyLang(lang);
+        });
+      });
+    })();
   </script>
 
 </body>
